@@ -1,0 +1,93 @@
+--  tạo cơ sở dữ liệu 
+CREATE DATABASE csdl_;
+GO
+USE csdl_;
+
+
+-- CREATE TABLE theloai
+CREATE TABLE theloai (
+				INT				NOT NULL,
+				VARCHAR(15) 	NOT NULL,
+	CONSTRAINT KC_THELOAI 
+	    PRIMARY KEY (matl)
+);
+
+-- CREATE TABLE phim
+CREATE TABLE phim (
+	maphim			INT				NOT NULL,
+	tenphim			VARCHAR(50) 	NOT NULL,
+	daodien			VARCHAR(50) 	NOT NULL,
+	nam_congchieu	INT				NOT NULL,
+	matl			INT				NOT NULL,
+	thoiluong		INT				NOT NULL,
+	doanhthu		DECIMAL(8,3) 	NOT NULL,
+	CONSTRAINT KC_PHIM 
+	    PRIMARY KEY (maphim)
+);
+
+-- CREATE TABLE dienvien
+CREATE TABLE dienvien (
+	madv			INT				NOT NULL,
+	nghedanh		VARCHAR(50) 	NOT NULL,
+	tenthat			VARCHAR(50) 	NOT NULL,
+	gioitinh		CHAR			NOT NULL CHECK (gioitinh IN ('m','f','F','M')),
+	ngaysinh		DATE			NOT NULL,
+	CONSTRAINT KC_DIENVIEN 
+	    PRIMARY KEY (madv)
+);
+
+-- CREATE TABLE vaidien
+CREATE TABLE vaidien (
+	manv			INT				NOT NULL,
+	maphim			INT				NOT NULL,
+	nhanvat			VARCHAR(20) 	NOT NULL,
+	madv			INT				NOT NULL,
+	CONSTRAINT KC_VAIDIEN 
+	    PRIMARY KEY (manv)
+);
+
+-- THIET LAP KHOA NGOAI
+ALTER TABLE PHIM 
+    ADD CONSTRAINT KN_PHIM_THELOAI 
+        FOREIGN KEY (matl) REFERENCES THELOAI(matl);
+
+ALTER TABLE VAIDIEN 
+    ADD CONSTRAINT KN_VAIDIEN_PHIM 
+        FOREIGN KEY (maphim) REFERENCES PHIM(maphim);
+
+ALTER TABLE VAIDIEN 
+    ADD CONSTRAINT KN_VAI_DIEN_DIENVIEN 
+        FOREIGN KEY (madv) REFERENCES DIENVIEN(madv);
+
+-- NHAP DU LIEU
+ALTER TABLE PHIM NOCHECK CONSTRAINT ALL;
+ALTER TABLE DIENVIEN NOCHECK CONSTRAINT ALL;
+
+INSERT INTO THELOAI 
+VALUES 
+	
+
+INSERT INTO PHIM 
+VALUES 
+	
+INSERT INTO DIENVIEN 
+VALUES 
+	
+INSERT INTO VAIDIEN 
+VALUES 
+	
+ALTER TABLE PHIM CHECK CONSTRAINT ALL;
+ALTER TABLE DIENVIEN CHECK CONSTRAINT ALL;
+
+-- 3.1 Cập nhật doanh thu phim
+UPDATE PHIM
+SET 
+	doanhthu = 81
+WHERE 
+	tenphim = 'Dia dao: Mat troi trong bong toi';
+
+-- 3.2 Xóa nhân vật có mã 114
+DELETE FROM 
+	vaidien
+WHERE 
+	manv = 114;

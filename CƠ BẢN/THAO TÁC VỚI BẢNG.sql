@@ -1,0 +1,57 @@
+---THÊM MỘT KHÁCH HÀNG MỚI INSERT INTO
+INSERT INTO [dbo].[Customers] ([CustomerID],[CompanyName],
+                    [ContactName],[Phone])
+VALUES('KH4','ĐẠT','SAO','ELL')
+--- SAO CHÉP BẢNG : ĐƠN HÀNG CÓ TỔNG GIÁ TRỊ HƠN 1000 ĐÔLA  SELECT INTO 
+WITH DOANH_THU AS(
+SELECT [OrderID], SUM([Quantity]*[UnitPrice]) AS"TỔNG TIỀN"
+FROM [dbo].[Order Details]
+GROUP BY [OrderID])
+
+SELECT O.* , DT."TỔNG TIỀN"
+INTO HIGHVALUEORDERS
+FROM [dbo].[Orders] O
+JOIN DOANH_THU DT
+ON DT.[OrderID]=O.[OrderID]
+WHERE DT.[TỔNG TIỀN]>1000
+
+---TẠO BẢNG VỚI CÁC SẢN PHẨM CÓ GIÁ >50
+SELECT *
+INTO HIGHPRODUCTS
+FROM [dbo].[Products]
+WHERE [UnitPrice]>50
+
+SELECT *
+FROM [dbo].[HIGHPRODUCTS]
+
+-- DELETE 
+SELECT *
+INTO CUSTOMER1
+FROM [dbo].[Customers]
+
+SELECT *
+FROM CUSTOMER1
+-- XÓA KHÁCH HÀNG 'ALFKI'
+DELETE 
+FROM CUSTOMER1
+WHERE CustomerID LIKE 'ALFKI'
+-- XÓA KHÁCH HÀNG BẮT ĐẦU QUỐC GIA ='U
+DELETE 
+FROM CUSTOMER1
+WHERE Country LIKE 'U%'
+
+--- UPDATE CẬP NHẬT ĐỊA CHỈ KHÁCH HÀNG CÓ CUSTOMERID LÀ 'ALFKI'
+UPDATE [dbo].[CUSTOMER1]
+SET [Address]='NEW ADDRESS'
+WHERE [CustomerID] LIKE 'ALFKI'
+--- TĂNG TOÀN BỘ GIÁ SẢN PHẨM LÊN 10%
+SELECT *
+INTO PRODUCT1
+FROM Products
+
+SELECT [UnitPrice]
+FROM PRODUCT1
+
+UPDATE PRODUCT1
+SET [UnitPrice]=[UnitPrice]+[UnitPrice]*10/100
+
